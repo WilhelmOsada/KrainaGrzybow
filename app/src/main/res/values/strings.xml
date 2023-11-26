@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Kraina Grzybów</string>
+    <string name="shop">Sklep</string>
+    <string name="basket">Koszyk</string>
+    <string name="profile">Profil</string>
+    <string name="search">Szukaj</string>
+    <string name="checkout">Kup</string>
+    <string name="profilename">Wilhelm</string>
+    <string name="logout">Wyloguj</string>
+    <string name="searchhint">Szukaj</string>
+</resources>

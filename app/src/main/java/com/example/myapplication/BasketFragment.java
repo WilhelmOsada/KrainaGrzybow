@@ -1,11 +1,13 @@
-
 package com.example.myapplication;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,15 +32,52 @@ public class BasketFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
-        Button checkoutButton = view.findViewById( R.id.btn_checkout);
+        Button checkoutButton = view.findViewById(R.id.btn_checkout);
         checkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //PATRYK
+                String paysafecardTestURL = "https://api.test.paysafe.com/";
+
+                // Create an Intent to open a web browser
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(paysafecardTestURL));
+
+                // Check if there is an app to handle the Intent
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intent);
+                } else {
+                    // Handle the case where no app can handle the Intent
+                    Toast.makeText(getContext(), "No app to handle the request", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
+        Button priceButton = view.findViewById(R.id.btn_price);
+        priceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Calculate the total price of all products in the basket
+                double totalPrice = calculateTotalPrice();
+
+                // Set the total price as text on the priceButton
+                String totalPriceText = totalPrice + "       ";
+                priceButton.setText(totalPriceText);
+            }
+        });
+
+
         return view;
+    }
+
+    // Function to calculate the total price of all products in the basket
+    private double calculateTotalPrice() {
+        double totalPrice = 0;
+
+        for (Product product : basketList) {
+            // Assuming each product has a getPrice() method
+            totalPrice += product.getPrice() * product.getQuantity();
+        }
+
+        return totalPrice;
     }
 
     public static void addToBasket(Product product) {
@@ -60,6 +99,7 @@ public class BasketFragment extends Fragment {
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
+
     }
 
     public static void removeFromBasket(Product product) {
